@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>عليا ❤️ مالك</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: 'Cairo', sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #ffb3c1, #2b193d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      /* خلفية متحركة ناعمة */
+      body::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          120deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(0, 0, 0, 0.25)
+        );
+        animation: cinematicMove 20s ease-in-out infinite alternate;
+        z-index: 0;
+      }
+
+      @keyframes cinematicMove {
+        from {
+          transform: scale(1) translateY(0);
+        }
+        to {
+          transform: scale(1.1) translateY(-20px);
+        }
+      }
+
+      .card {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(18px);
+        border-radius: 28px;
+        padding: 45px 35px;
+        max-width: 430px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        animation: fadeUp 1.6s ease forwards;
+        opacity: 0;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        font-size: 2.3rem;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+      }
+
+      .love-text {
+        font-size: 1.05rem;
+        line-height: 2;
+        margin-bottom: 35px;
+      }
+
+      .timer {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 35px;
+      }
+
+      .time-box {
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 18px;
+        padding: 16px 8px;
+      }
+
+      .time-box span {
+        display: block;
+        font-size: 1.7rem;
+        font-weight: 700;
+      }
+
+      .time-box small {
+        font-size: 0.8rem;
+        opacity: 0.9;
+      }
+
+      .footer {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      .heart {
+        color: #ff2d55;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.25);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* زر الموسيقى */
+      .music-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: #fff;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+
+  <body>
+    <audio id="bgMusic" loop>
+      <source src="music.mp3" type="audio/mpeg" />
+    </audio>
+
+    <button class="music-btn" id="musicToggle">🎵</button>
+
+    <div class="card">
+      <h1>عليا <span class="heart">❤️</span></h1>
+
+      <div class="subtitle">قصتنا بدأت بهدوء… و حبيتك بسرعة</div>
+
+      <div class="love-text">
+        عليا، من لما بدأنا نحكي، صار للوقت طعم مختلف. كل ثانية معك تثبت لي إن
+        بعض اللقاءات ما بتجي صدفة… بتجي قدر.
+        <br /><br />
+        هاي اللحظات عم نعدّها، بس الحقيقة؟ أنا عم أعيشها.
+      </div>
+
+      <div class="timer">
+        <div class="time-box">
+          <span id="days">0</span>
+          <small>يوم</small>
+        </div>
+        <div class="time-box">
+          <span id="hours">0</span>
+          <small>ساعة</small>
+        </div>
+        <div class="time-box">
+          <span id="minutes">0</span>
+          <small>دقيقة</small>
+        </div>
+        <div class="time-box">
+          <span id="seconds">0</span>
+          <small>ثانية</small>
+        </div>
+      </div>
+
+      <div class="footer">
+        معك، ومنك،
+        <br />
+        <strong>بحبك</strong>
+        <br />
+        <strong>مالك</strong>
+      </div>
+    </div>
+
+    <script>
+      // المؤقت
+      const startDate = new Date('2026-01-21T00:00:00');
+
+      function updateTimer() {
+        const now = new Date();
+        const diff = now - startDate;
+        if (diff < 0) return;
+
+        const s = Math.floor(diff / 1000);
+        const m = Math.floor(s / 60);
+        const h = Math.floor(m / 60);
+        const d = Math.floor(h / 24);
+
+        days.textContent = d;
+        hours.textContent = h % 24;
+        minutes.textContent = m % 60;
+        seconds.textContent = s % 60;
+      }
+
+      setInterval(updateTimer, 1000);
+      updateTimer();
+
+      // الموسيقى
+      const music = document.getElementById('bgMusic');
+      const btn = document.getElementById('musicToggle');
+      let playing = false;
+
+      btn.onclick = () => {
+        if (!playing) {
+          music.play();
+          btn.textContent = '⏸️';
+        } else {
+          music.pause();
+          btn.textContent = '🎵';
+        }
+        playing = !playing;
+      };
+    </script>
+  </body>
+</html>
